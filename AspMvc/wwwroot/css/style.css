@@ -21,7 +21,7 @@ body > header
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    background-color: dodgerblue;
+    background-color: lightskyblue;
 }
 
 body > header > h1 {
@@ -165,7 +165,7 @@ body > footer {
     grid-column: 1;
     grid-row: 3;
     display: flex;
-    background-color: aqua;
+    background-color: lightsteelblue;
 }
 
 body > footer > p {
