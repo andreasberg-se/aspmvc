@@ -18,15 +18,11 @@
     <input type="submit" value="Search" class="search" />
 </form>
 
-<table>
+<div class="container">
 @foreach (Person person in Model)
 {
-    <tr>
-        <td>@person.FirstName</td>
-        <td>@person.LastName</td>
-        <td>@person.City</td>
-        <td>@person.Phone</td>
-        <td><a asp-controller="Person" asp-action="Delete" asp-route-id="@person.PersonId">Delete</a></td>
-    </tr>
+    <div class="alert alert-success">
+        <partial name="Shared/_PersonPartial.cshtml" model="person" />
+    </div>
 }
-</table>
+</div>

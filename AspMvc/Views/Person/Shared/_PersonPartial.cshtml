@@ -1,0 +1,9 @@
+@model Person
+
+<h3>@Model.LastName, @Model.FirstName</h3>
+
+<p>City: @Model.City</p>
+
+<p>Phone: @Model.Phone</p>
+
+<a asp-controller="Person" asp-action="Delete" asp-route-id="@Model.PersonId">Delete</a>
