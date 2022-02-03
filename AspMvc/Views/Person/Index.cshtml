@@ -1,0 +1,32 @@
+@model List<Person>
+
+@{
+    ViewData["Title"] = "People Index";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>@Html.ActionLink("Add person", "Create", "Person")</p>
+
+@if (ViewBag.SearchString == null)
+{
+    ViewData["SearchString"] = "";
+}
+
+<form asp-controller="Person" asp-action="Index" method="post">
+    <input type="text" name="searchString" value="@ViewBag.SearchString" class="search" />
+    <input type="submit" value="Search" class="search" />
+</form>
+
+<table>
+@foreach (Person person in Model)
+{
+    <tr>
+        <td>@person.FirstName</td>
+        <td>@person.LastName</td>
+        <td>@person.City</td>
+        <td>@person.Phone</td>
+        <td><a asp-controller="Person" asp-action="Delete" asp-route-id="@person.PersonId">Delete</a></td>
+    </tr>
+}
+</table>
