@@ -4,9 +4,6 @@
 
 <h2>@ViewBag.Title</h2>
 
-@if (ViewBag.Message != null)
-{
-    <p>@ViewBag.Message</p>
-}
+<partial name="~/Views/Person/Shared/_DeletePartial.cshtml" model="@ViewBag.Message" />
 
 <p><a asp-contoller="Person" asp-action="Index">Back to list</a></p>

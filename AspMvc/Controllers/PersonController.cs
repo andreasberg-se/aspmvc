@@ -16,14 +16,7 @@ namespace AspMvc.Controllers
 
         public IActionResult Index()
         {
-            return View(_personService.GetList());
-        }
-
-        [HttpPost]
-        public IActionResult Index(string searchString)
-        {
-            ViewBag.SearchString = searchString;
-            return View(_personService.SearchAND(searchString));
+            return View();
         }
 
         [HttpGet]
@@ -50,14 +43,33 @@ namespace AspMvc.Controllers
             return View(createPersonViewModel);
         }
 
+        [HttpPost]
+        public IActionResult Search(string searchString)
+        {
+            ViewData["s"] = searchString;
+            return PartialView("~/Views/Person/Shared/_ListPartial.cshtml", _personService.SearchAND(searchString));
+        }
+
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult ListPeople()
+        {
+            return PartialView("~/Views/Person/Shared/_ListPartial.cshtml", _personService.GetList());
+        }
+
+        [HttpGet]
+        public IActionResult ShowPerson(int personId)
+        {
+            return PartialView("~/Views/Person/Shared/_DetailPartial.cshtml", _personService.GetById(personId));
+        }
+
+        [HttpGet]
+        public IActionResult DeletePerson(int personId)
         {
             ViewBag.Message = "Failed to delete person!";
-            if (_personService.Delete(id))
+            if (_personService.Delete(personId))
                 ViewBag.Message = "The person was deleted successfully!";
 
-            return View();
+            return PartialView("~/Views/Person/Shared/_DeletePartial.cshtml");
         }
     }
 
