@@ -27,10 +27,10 @@ namespace AspMvc.Models.ViewModels
 
         public bool IsValidForm()
         {
-            return ((!string.IsNullOrWhiteSpace(FirstName))
-            && (!string.IsNullOrWhiteSpace(LastName))
-            && (!string.IsNullOrWhiteSpace(City))
-            && (!string.IsNullOrWhiteSpace(Phone)));
+            return ( (!string.IsNullOrWhiteSpace(FirstName))
+                && (!string.IsNullOrWhiteSpace(LastName))
+                && (!string.IsNullOrWhiteSpace(City))
+                && (!string.IsNullOrWhiteSpace(Phone)) );
         }
 
         public CreatePersonViewModel() {}

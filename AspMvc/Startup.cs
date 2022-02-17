@@ -8,11 +8,21 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AspMvc.Models.Repositories;
+using AspMvc.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace AspMvc
 {
     public class Startup
     {
+        IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -22,8 +32,10 @@ namespace AspMvc
             {
                 options.IdleTimeout = TimeSpan.FromHours(1);
             });
-            //services.AddControllersWithViews();
             services.AddMvc();
+            services.AddDbContext<AspMvcDbContext>(
+                options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

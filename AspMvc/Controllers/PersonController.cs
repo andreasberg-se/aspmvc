@@ -1,17 +1,20 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using AspMvc.Models;
 using AspMvc.Models.ViewModels;
 using AspMvc.Models.Services;
+using AspMvc.Data;
+using System.Linq;
 
 namespace AspMvc.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly IPersonService _personService;
+        private readonly AspMvcDbContext _aspMvcDbContext;
 
-        public PersonController()
+        public PersonController(AspMvcDbContext aspMvcDbContext)
         {
-            _personService = new PersonService();
+            _aspMvcDbContext = aspMvcDbContext;
         }
 
         public IActionResult Index()
@@ -34,11 +37,15 @@ namespace AspMvc.Controllers
 
             if (ModelState.IsValid)
             {
-                Person person = _personService.Add(createPersonViewModel);
-                if (person != null)
-                    return RedirectToAction(nameof(Index));
+                Person person = new Person();
+                person.FirstName = createPersonViewModel.FirstName;
+                person.LastName = createPersonViewModel.LastName;
+                person.City = createPersonViewModel.City;
+                person.Phone = createPersonViewModel.Phone;
 
-                ModelState.AddModelError("Error", "Failed to add person!");
+                _aspMvcDbContext.People.Add(person);
+                _aspMvcDbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
             return View(createPersonViewModel);
         }
@@ -46,28 +53,46 @@ namespace AspMvc.Controllers
         [HttpPost]
         public IActionResult Search(string searchString)
         {
-            ViewData["s"] = searchString;
-            return PartialView("~/Views/Person/Shared/_ListPartial.cshtml", _personService.SearchAND(searchString));
+            var result = from person in _aspMvcDbContext.People
+                where person.FirstName.Contains(searchString.Trim())
+                    || person.LastName.Contains(searchString.Trim())
+                    || person.City.Contains(searchString.Trim()) 
+                select person;
+
+            try
+            {
+                return PartialView("~/Views/Person/Shared/_ListPartial.cshtml", result.ToList());
+            }
+            catch
+            {
+                return PartialView("~/Views/Person/Shared/_ListPartial.cshtml", _aspMvcDbContext.People.ToList());
+            }    
         }
 
         [HttpGet]
         public IActionResult ListPeople()
         {
-            return PartialView("~/Views/Person/Shared/_ListPartial.cshtml", _personService.GetList());
+            return PartialView("~/Views/Person/Shared/_ListPartial.cshtml", _aspMvcDbContext.People.ToList());
         }
 
         [HttpGet]
         public IActionResult ShowPerson(int personId)
         {
-            return PartialView("~/Views/Person/Shared/_DetailPartial.cshtml", _personService.GetById(personId));
+            return PartialView("~/Views/Person/Shared/_DetailPartial.cshtml", _aspMvcDbContext.People.Find(personId));
         }
 
         [HttpGet]
         public IActionResult DeletePerson(int personId)
         {
+            var deletePerson = _aspMvcDbContext.People.Find(personId);
+
             ViewBag.Message = "Failed to delete person!";
-            if (_personService.Delete(personId))
+            if (deletePerson != null)
+            {
+                _aspMvcDbContext.People.Remove(deletePerson);
+                _aspMvcDbContext.SaveChanges();
                 ViewBag.Message = "The person was deleted successfully!";
+            }     
 
             return PartialView("~/Views/Person/Shared/_DeletePartial.cshtml");
         }
