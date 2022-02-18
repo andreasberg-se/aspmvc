@@ -13,8 +13,21 @@
     <input type="button" value="Delete" onClick="deletePerson()" />
 </form>
 
-<p>@Html.ActionLink("Add person", "Create", "Person")
- - @Html.ActionLink("Add city", "Index", "City")
- - @Html.ActionLink("Add country", "Index", "Country")</p>
+<table>
+    <tr>
+        <td>@Html.ActionLink("Add person", "Create", "Person")</td>
+        <td>@Html.ActionLink("Add city", "Index", "City")</td>
+        <td>@Html.ActionLink("Add country", "Index", "Country")</td>
+        <td>@Html.ActionLink("Add language", "Index", "Language")</td>
+        <td>@Html.ActionLink("Add language to person", "Index", "PersonLanguage")</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>@Html.ActionLink("View/Delete cities", "Show", "City")</td>
+        <td>@Html.ActionLink("View/Delete countries", "Show", "Country")</td>
+        <td>@Html.ActionLink("View/Delete languages", "Show", "Language")</td>
+        <td>@Html.ActionLink("View/Delete spoken languages", "Show", "PersonLanguage")</td>
+    </tr>
+</table>
 
 <div id="container" class="container"></div>

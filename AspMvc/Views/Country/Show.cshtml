@@ -1,0 +1,23 @@
+@model List<Country>
+@{
+    ViewData["Title"] = "View/Delete Countries";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Message != null)
+{
+    <strong>@ViewBag.Message</strong>
+}
+
+<table>
+    @foreach(var country in Model)
+    {
+        <tr>
+            <td>@country.Name</td>
+            <td><a asp-controller="Country" asp-action="Show" asp-route-id="@country.CountryId">Delete</a></td>
+        </tr>
+    }
+</table>
+
+<p><a asp-controller="Person" asp-action="Index">Back to index</a></p>

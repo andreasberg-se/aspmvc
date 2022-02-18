@@ -1,0 +1,23 @@
+@model List<Language>
+@{
+    ViewData["Title"] = "View/Delete Languages";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Message != null)
+{
+    <strong>@ViewBag.Message</strong>
+}
+
+<table>
+    @foreach(var language in Model)
+    {
+        <tr>
+            <td>@language.LanguageName</td>
+            <td><a asp-controller="Language" asp-action="Show" asp-route-id="@language.LanguageId">Delete</a></td>
+        </tr>
+    }
+</table>
+
+<p><a asp-controller="Person" asp-action="Index">Back to index</a></p>

@@ -15,6 +15,8 @@ namespace AspMvc.Data
         public DbSet<Person> People { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<PersonLanguage> PersonLanguages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,8 +24,10 @@ namespace AspMvc.Data
             modelBuilder.Entity<Person>().HasKey(p => p.PersonId);
             modelBuilder.Entity<City>().HasKey(c => c.CityId);
             modelBuilder.Entity<Country>().HasKey(co => co.CountryId);
+            modelBuilder.Entity<Language>().HasKey(l => l.LanguageId);
+            modelBuilder.Entity<PersonLanguage>().HasKey(pl => new { pl.PersonId, pl.LanguageId });
 
-            // relationships
+            // relationships (one to many)
             modelBuilder.Entity<City>()
                 .HasOne(ci => ci.Country)
                 .WithMany(co => co.Cities)
@@ -33,6 +37,17 @@ namespace AspMvc.Data
                 .HasOne(p => p.City)
                 .WithMany(ci => ci.People)
                 .HasForeignKey(p => p.CityId);
+
+            // relationships (many to many)
+            modelBuilder.Entity<PersonLanguage>()
+                .HasOne(pl => pl.Person)
+                .WithMany(p => p.PersonLanguages)
+                .HasForeignKey(pl => pl.PersonId);
+
+            modelBuilder.Entity<PersonLanguage>()
+                .HasOne(pl => pl.Language)
+                .WithMany(l => l.PersonLanguages)
+                .HasForeignKey(pl => pl.LanguageId);
 
             // seeding
             modelBuilder.Entity<Country>().HasData(new Country { CountryId = 1, Name = "Sverige" });
@@ -52,6 +67,24 @@ namespace AspMvc.Data
             modelBuilder.Entity<Person>().HasData(new Person { PersonId = 1, FirstName = "Andreas", LastName = "Berg", CityId = 1, Phone = "0000-000 000" });
             modelBuilder.Entity<Person>().HasData(new Person { PersonId = 2, FirstName = "Anders", LastName = "Andersson", CityId = 2, Phone = "1234-567 890" });
             modelBuilder.Entity<Person>().HasData(new Person { PersonId = 3, FirstName = "Maria", LastName = "Svensson", CityId = 3, Phone = "0987-654 321" });
+
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 1, LanguageName = "Svenska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 2, LanguageName = "Norska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 3, LanguageName = "Danska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 4, LanguageName = "Finska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 5, LanguageName = "Isländska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 6, LanguageName = "Engelska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 7, LanguageName = "Tyska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 8, LanguageName = "Spanska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 9, LanguageName = "Italienska" });
+            modelBuilder.Entity<Language>().HasData(new Language { LanguageId = 10, LanguageName = "Ryska" });
+
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 1, LanguageId = 1 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 1, LanguageId = 6 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 2, LanguageId = 1 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 2, LanguageId = 6 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 3, LanguageId = 1 });
+            modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 3, LanguageId = 9 });
         }
     }
 

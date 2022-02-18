@@ -1,5 +1,5 @@
-using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace AspMvc.Models
 {
@@ -19,6 +19,8 @@ namespace AspMvc.Models
         public City City { get; set; }
 
         public string Phone { get; set; }
+
+        public List<PersonLanguage> PersonLanguages { get; set; }
     }
 
 }

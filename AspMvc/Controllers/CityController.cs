@@ -45,5 +45,34 @@ namespace AspMvc.Controllers
             }
             return View(cityViewModel);
         }
+
+        [HttpGet]
+        public IActionResult Show()
+        {
+            return View(_aspMvcDbContext.Cities.ToList());
+        }
+
+        [HttpGet("{controller}/{action}/{id}")]
+        public IActionResult Show(int id)
+        {
+            var deleteCity = _aspMvcDbContext.Cities.FirstOrDefault(ci => ci.CityId == id);
+            if (deleteCity == null)
+            {
+                ViewData["Message"] = "Failed to delete city (not found)!";
+                return View(_aspMvcDbContext.Cities.ToList());
+            }
+
+            try
+            {
+                _aspMvcDbContext.Cities.Remove(deleteCity);
+                _aspMvcDbContext.SaveChanges();
+                return RedirectToAction(nameof(Index), "Person");
+            }
+            catch
+            {
+                ViewData["Message"] = $"Failed to delete {deleteCity.Name}!";
+            }
+            return View(_aspMvcDbContext.Cities.ToList());
+        }
     }
 }

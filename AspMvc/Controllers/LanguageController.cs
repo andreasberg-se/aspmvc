@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using AspMvc.Models;
 using AspMvc.Models.ViewModels;
@@ -9,11 +8,12 @@ using System.Collections.Generic;
 
 namespace AspMvc.Controllers
 {
-    public class CountryController : Controller
+
+    public class LanguageController : Controller
     {
         private readonly AspMvcDbContext _aspMvcDbContext;
 
-        public CountryController(AspMvcDbContext aspMvcDbContext)
+        public LanguageController(AspMvcDbContext aspMvcDbContext)
         {
             _aspMvcDbContext = aspMvcDbContext;
         }
@@ -25,50 +25,51 @@ namespace AspMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(CountryViewModel countryViewModel)
+        public IActionResult Index(LanguageViewModel languageViewModel)
         {
-            if (!countryViewModel.IsValidForm())
-                return View(countryViewModel);
+            if (!languageViewModel.IsValidForm())
+                return View(languageViewModel);
 
             if (ModelState.IsValid)
             {
-                Country country = new Country();
-                country.Name = countryViewModel.Name;
+                Language language = new Language();
+                language.LanguageName = languageViewModel.LanguageName;
                 
-                _aspMvcDbContext.Countries.Add(country);
+                _aspMvcDbContext.Languages.Add(language);
                 _aspMvcDbContext.SaveChanges();
                 return RedirectToAction(nameof(Index), "Person");
             }
-            return View(countryViewModel);
+            return View(languageViewModel);
         }
 
         [HttpGet]
         public IActionResult Show()
         {
-            return View(_aspMvcDbContext.Countries.ToList());
+            return View(_aspMvcDbContext.Languages.ToList());
         }
 
         [HttpGet("{controller}/{action}/{id}")]
         public IActionResult Show(int id)
         {
-            var deleteCountry = _aspMvcDbContext.Countries.FirstOrDefault(co => co.CountryId == id);
-            if (deleteCountry == null)
+            var deleteLanguage = _aspMvcDbContext.Languages.FirstOrDefault(l => l.LanguageId == id);
+            if (deleteLanguage == null)
             {
-                ViewData["Message"] = "Failed to delete country (not found)!";
-                return View(_aspMvcDbContext.Countries.ToList());
+                ViewData["Message"] = "Failed to delete language (not found)!";
+                return View(_aspMvcDbContext.Languages.ToList());
             }
 
             try
             {
-                _aspMvcDbContext.Countries.Remove(deleteCountry);
+                _aspMvcDbContext.Languages.Remove(deleteLanguage);
                 _aspMvcDbContext.SaveChanges();
                 return RedirectToAction(nameof(Index), "Person");
             }
             catch
             {
-                ViewData["Message"] = $"Failed to delete {deleteCountry.Name}!";
+                ViewData["Message"] = $"Failed to delete {deleteLanguage.LanguageName}!";
             }
-            return View(_aspMvcDbContext.Countries.ToList());
+            return View(_aspMvcDbContext.Languages.ToList());
         }
     }
+    
 }

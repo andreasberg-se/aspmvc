@@ -1,0 +1,27 @@
+@model PersonLanguageViewModel
+@{
+    ViewData["Title"] = "View/Delete Spoken Languages";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Message != null)
+{
+    <strong>@ViewBag.Message</strong>
+}
+
+<table>
+    @foreach(var item in Model.PersonLanguages)
+    {
+        Person person = Model.People.FirstOrDefault(p => p.PersonId == item.PersonId);
+        Language language = Model.Languages.FirstOrDefault(l => l.LanguageId == item.LanguageId);
+        <tr>
+            <td>@person.FirstName</td>
+            <td>@person.LastName</td>
+            <td>@language.LanguageName</td>
+            <td><a asp-controller="PersonLanguage" asp-action="Show" asp-route-pid="@item.PersonId" asp-route-lid="@item.LanguageId">Delete</a></td>
+        </tr>
+    }
+</table>
+
+<p><a asp-controller="Person" asp-action="Index">Back to index</a></p>

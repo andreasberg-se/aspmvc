@@ -1,0 +1,22 @@
+@model LanguageViewModel
+@{
+    ViewData["Title"] = "Add Language";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-controller="Language" asp-action="Index" method="post">
+
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <label asp-for="LanguageName" class="left"></label>
+    <input asp-for="LanguageName" />
+    <label class="left"></label>
+    <span asp-validation-for="LanguageName" class="validation"></span>
+
+    <label class="left">&nbsp;</label>
+    <input type="submit" value="Add language" class="create" />
+
+</form>
+
+<p><a asp-controller="Person" asp-action="Index">Back to index</a></p>
