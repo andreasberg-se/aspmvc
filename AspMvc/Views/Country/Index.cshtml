@@ -1,0 +1,22 @@
+@model CountryViewModel
+@{
+    ViewData["Title"] = "Add Country";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-controller="Country" asp-action="Index" method="post">
+
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <label asp-for="Name" class="left"></label>
+    <input asp-for="Name" />
+    <label class="left"></label>
+    <span asp-validation-for="Name" class="validation"></span>
+
+    <label class="left">&nbsp;</label>
+    <input type="submit" value="Add country" class="create" />
+
+</form>
+
+<p><a asp-contoller="Person" asp-action="Index">Back to list</a></p>

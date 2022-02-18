@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "People Index";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form class="controls bg-secondary">
+    <input type="text" id="searchString" name="searchString" value="" class="controls" />
+    <input type="button" value="Search" onClick="search()" />
+    <input type="button" value="List All People" onClick="listPeople()" />
+    <input type="number" id="personId" value="1" class="controls" />
+    <input type="button" value="Details" onClick="showPerson()" />
+    <input type="button" value="Delete" onClick="deletePerson()" />
+</form>
+
+<p>@Html.ActionLink("Add person", "Create", "Person")
+ - @Html.ActionLink("Add city", "Index", "City")
+ - @Html.ActionLink("Add country", "Index", "Country")</p>
+
+<div id="container" class="container"></div>

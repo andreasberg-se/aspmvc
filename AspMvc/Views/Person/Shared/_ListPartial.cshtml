@@ -1,0 +1,8 @@
+@model List<Person>
+
+@foreach (Person person in Model)
+{
+    <div class="alert alert-success">
+        <partial name="~/Views/Person/Shared/_PersonPartial.cshtml" model="person" />
+    </div>
+}
