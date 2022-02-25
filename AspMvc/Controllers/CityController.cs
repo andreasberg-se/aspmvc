@@ -5,10 +5,11 @@ using AspMvc.Models.ViewModels;
 using AspMvc.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspMvc.Controllers
 {
+    [Authorize(Roles = "Admin, Moderator, User")]
     public class CityController : Controller
     {
         private readonly AspMvcDbContext _aspMvcDbContext;
@@ -26,6 +27,7 @@ namespace AspMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Moderator")]
         public IActionResult Index(CityViewModel cityViewModel)
         {
             ViewData["CountryList"] = new SelectList(_aspMvcDbContext.Countries, "CountryId", "Name");
@@ -52,10 +54,54 @@ namespace AspMvc.Controllers
             return View(_aspMvcDbContext.Cities.ToList());
         }
 
-        [HttpGet("{controller}/{action}/{id}")]
-        public IActionResult Show(int id)
+        [HttpGet("{controller}/{action}/{cityId}")]
+        [Authorize(Roles = "Admin, Moderator")]
+        public IActionResult Edit(int cityId)
         {
-            var deleteCity = _aspMvcDbContext.Cities.FirstOrDefault(ci => ci.CityId == id);
+            ViewData["CountryList"] = new SelectList(_aspMvcDbContext.Countries, "CountryId", "Name");
+            var editCity = _aspMvcDbContext.Cities.Find(cityId);
+
+            if (editCity != null)
+            {
+                EditCityViewModel editCityViewModel = new EditCityViewModel();
+                editCityViewModel.CityId = editCity.CityId;
+                editCityViewModel.Name = editCity.Name;
+                editCityViewModel.CountryId = editCity.CountryId;
+                return View(editCityViewModel);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Moderator")]
+        public IActionResult Edit(EditCityViewModel editCityViewModel)
+        {
+            ViewData["CountryList"] = new SelectList(_aspMvcDbContext.Countries, "CountryId", "Name");
+            if ((!editCityViewModel.IsValidForm()) || ((!ModelState.IsValid)))
+                return View(editCityViewModel);
+
+            int cityId = editCityViewModel.CityId;
+            var editCity = _aspMvcDbContext.Cities.Find(cityId);
+            if (editCity != null)
+            {
+                editCity.Name = editCityViewModel.Name;
+                editCity.CountryId = editCityViewModel.CountryId;
+                _aspMvcDbContext.Cities.Update(editCity);
+                _aspMvcDbContext.SaveChanges();
+                return RedirectToAction("Index", "Person");
+            }
+            
+            ViewData["Message"] = "Failed to update city!";
+            return View(editCityViewModel);
+        }
+
+        [HttpGet("{controller}/{action}/{cityId}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Show(int cityId)
+        {
+            var deleteCity = _aspMvcDbContext.Cities.FirstOrDefault(ci => ci.CityId == cityId);
             if (deleteCity == null)
             {
                 ViewData["Message"] = "Failed to delete city (not found)!";

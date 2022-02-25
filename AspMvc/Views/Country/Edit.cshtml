@@ -1,0 +1,41 @@
+@model EditCountryViewModel
+
+@{
+    ViewData["Title"] = "Edit Country";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Message != null)
+{
+    <p><strong>@ViewBag.Message</strong></p>
+}
+
+@if ((User.IsInRole("Admin")) || (User.IsInRole("Moderator")))
+{
+    if (@Model == null)
+    {
+        <p><strong>Country not found!</strong></p>
+    }
+    else
+    {
+        <form asp-controller="Country" asp-action="Edit" method="post">
+
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <label asp-for="CountryId" hidden="true"></label>
+            <input asp-for="CountryId" hidden="true" />
+
+            <label asp-for="Name" class="left"></label>
+            <input asp-for="Name" />
+            <label class="left"></label>
+            <span asp-validation-for="Name" class="validation"></span>
+
+            <label class="left">&nbsp;</label>
+            <input type="submit" value="Edit country" class="create" />
+
+        </form>
+    }
+}
+
+<p><a asp-controller="Person" asp-action="Index">Back to index</a></p>

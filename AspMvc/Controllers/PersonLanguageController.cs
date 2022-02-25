@@ -4,11 +4,11 @@ using AspMvc.Models.ViewModels;
 using AspMvc.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspMvc.Controllers
 {
-
+    [Authorize(Roles = "Admin, Moderator, User")]
     public class PersonLanguageController : Controller
     {
         private readonly AspMvcDbContext _aspMvcDbContext;
@@ -27,6 +27,7 @@ namespace AspMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Moderator")]
         public IActionResult Index(PersonLanguage personLanguage)
         {
             ViewData["PeopleList"] = new SelectList(_aspMvcDbContext.People, "PersonId", "FirstName");
@@ -58,6 +59,7 @@ namespace AspMvc.Controllers
         }
 
         [HttpGet("{controller}/{action}/{pid}/{lid}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Show(int pid, int lid)
         {
             PersonLanguageViewModel personLanguageViewModel = new PersonLanguageViewModel();

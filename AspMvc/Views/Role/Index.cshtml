@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Change roles";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Message != null)
+{
+    <strong>@ViewBag.Message</strong>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Role" asp-action="Index" method="post">
+
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <label class="left">User:</label>
+        <select name="user" asp-items="@ViewBag.Users"></select>
+
+        <label class="left">Role:</label>
+        <select name="role" asp-items="@ViewBag.Roles"></select>
+
+        <label class="left">&nbsp;</label>
+        <input type="submit" value="Change role" class="create" />
+
+    </form>
+}
+
+<p><a asp-controller="Person" asp-action="Index">Back to index</a></p>

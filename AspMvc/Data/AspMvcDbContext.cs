@@ -1,11 +1,14 @@
+using System;
 using Pomelo.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using AspMvc.Models;
 
 namespace AspMvc.Data
 {
 
-    public class AspMvcDbContext : DbContext
+    public class AspMvcDbContext : IdentityDbContext<AspMvcUser>
     {
         public AspMvcDbContext(DbContextOptions<AspMvcDbContext> options) : base(options)
         {
@@ -18,8 +21,12 @@ namespace AspMvc.Data
         public DbSet<Language> Languages { get; set; }
         public DbSet<PersonLanguage> PersonLanguages { get; set; }
 
+        public override DbSet<AspMvcUser> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // primary keys
             modelBuilder.Entity<Person>().HasKey(p => p.PersonId);
             modelBuilder.Entity<City>().HasKey(c => c.CityId);
@@ -85,6 +92,34 @@ namespace AspMvc.Data
             modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 2, LanguageId = 6 });
             modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 3, LanguageId = 1 });
             modelBuilder.Entity<PersonLanguage>().HasData(new PersonLanguage { PersonId = 3, LanguageId = 9 });
+
+            // seeding (user roles and standard account)
+            string adminRoleId = Guid.NewGuid().ToString();
+            string moderatorRoleId = Guid.NewGuid().ToString();
+            string userRoleId = Guid.NewGuid().ToString();
+
+            string accountId = Guid.NewGuid().ToString();
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole{ Id = adminRoleId, Name = "Admin", NormalizedName = "ADMIN" });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole{ Id = moderatorRoleId, Name = "Moderator", NormalizedName = "MODERATOR" });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole{ Id = userRoleId, Name = "User", NormalizedName = "USER" });
+
+            PasswordHasher<AspMvcUser> passwordHasher = new PasswordHasher<AspMvcUser>();
+
+            modelBuilder.Entity<AspMvcUser>().HasData(new AspMvcUser
+            {
+                Id = accountId,
+                Email = "mail@domain.com",
+                NormalizedEmail = "MAIL@DOMAIN.COM",
+                UserName = "mail@domain.com",
+                NormalizedUserName = "MAIL@DOMAIN.COM",
+                PasswordHash = passwordHasher.HashPassword(null, "pass1234"),
+                FirstName = "Andreas",
+                LastName = "Berg",
+                Birthdate = new DateTime(2000, 10, 31)
+            });
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string> { UserId = accountId, RoleId = userRoleId });
         }
     }
 

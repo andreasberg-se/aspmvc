@@ -19,7 +19,10 @@
             <td>@person.FirstName</td>
             <td>@person.LastName</td>
             <td>@language.LanguageName</td>
-            <td><a asp-controller="PersonLanguage" asp-action="Show" asp-route-pid="@item.PersonId" asp-route-lid="@item.LanguageId">Delete</a></td>
+            @if (User.IsInRole("Admin"))
+            {
+                <td><a asp-controller="PersonLanguage" asp-action="Show" asp-route-pid="@item.PersonId" asp-route-lid="@item.LanguageId">Delete</a></td>
+            }
         </tr>
     }
 </table>

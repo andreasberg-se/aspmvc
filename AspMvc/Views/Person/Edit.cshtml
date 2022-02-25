@@ -1,0 +1,56 @@
+@model EditPersonViewModel
+
+@{
+    ViewData["Title"] = "Edit Person";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Message != null)
+{
+    <p><strong>@ViewBag.Message</strong></p>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (@Model == null)
+    {
+        <p><strong>Person not found!</strong></p>
+    }
+    else
+    {
+        <form asp-controller="Person" asp-action="Edit" method="post">
+
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <label asp-for="PersonId" hidden="true"></label>
+            <input asp-for="PersonId" hidden="true" />
+
+            <label asp-for="FirstName" class="left"></label>
+            <input asp-for="FirstName" />
+            <label class="left"></label>
+            <span asp-validation-for="FirstName" class="validation"></span>
+
+           <label asp-for="LastName" class="left"></label>
+           <input asp-for="LastName" />
+           <label class="left"></label>
+           <span asp-validation-for="LastName" class="validation"></span>
+
+            <label asp-for="CityId" class="left"></label>
+            <select asp-for="CityId" asp-items="@ViewBag.CityList"></select>
+            <label class="left"></label>
+            <span asp-validation-for="CityId" class="validation"></span>
+
+            <label asp-for="Phone" class="left"></label>
+            <input asp-for="Phone" />
+            <label class="left"></label>
+            <span asp-validation-for="Phone" class="validation"></span>
+
+            <label class="left">&nbsp;</label>
+            <input type="submit" value="Edit person" class="create" />
+
+        </form>
+    }
+}
+
+<p><a asp-controller="Person" asp-action="Index">Back to index</a></p>

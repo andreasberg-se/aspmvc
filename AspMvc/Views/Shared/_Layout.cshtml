@@ -19,9 +19,13 @@
                 <li>@Html.ActionLink("Projects", "Projects", "Home")</li>
                 <li><a href="/FeverCheck">Fever Check</a></li>
                 <li><a href="/GuessingGame">Guessing Game</a></li>
-                <li>@Html.ActionLink("People Index", "Index", "Person")</li>
+                <li>@Html.ActionLink("People Index", "Index", "Person")</li>        
             </ul>
         </header>
+
+        <nav>
+            <partial name="_LoginPartial.cshtml" />
+        </nav>
 
         <main>
             @RenderBody()

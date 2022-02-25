@@ -4,30 +4,37 @@
 
 <h2>@ViewBag.Title</h2>
 
-<form class="controls bg-secondary">
-    <input type="text" id="searchString" name="searchString" value="" class="controls" />
-    <input type="button" value="Search" onClick="search()" />
-    <input type="button" value="List All People" onClick="listPeople()" />
-    <input type="number" id="personId" value="1" class="controls" />
-    <input type="button" value="Details" onClick="showPerson()" />
-    <input type="button" value="Delete" onClick="deletePerson()" />
-</form>
+@if (User.Identity.IsAuthenticated)
+{
+    <form class="controls bg-secondary">
+        <input type="text" id="searchString" name="searchString" value="" class="controls" />
+        <input type="button" value="Search" onClick="search()" />
+        <input type="button" value="List All People" onClick="listPeople()" />
+        <input type="number" id="personId" value="1" class="controls" />
+        <input type="button" value="Details" onClick="showPerson()" />
+        @if (User.IsInRole("Admin"))
+        {
+            <input type="button" value="Delete" onClick="deletePerson()" />
+        }
+    </form>
 
-<table>
-    <tr>
-        <td>@Html.ActionLink("Add person", "Create", "Person")</td>
-        <td>@Html.ActionLink("Add city", "Index", "City")</td>
-        <td>@Html.ActionLink("Add country", "Index", "Country")</td>
-        <td>@Html.ActionLink("Add language", "Index", "Language")</td>
-        <td>@Html.ActionLink("Add language to person", "Index", "PersonLanguage")</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>@Html.ActionLink("View/Delete cities", "Show", "City")</td>
-        <td>@Html.ActionLink("View/Delete countries", "Show", "Country")</td>
-        <td>@Html.ActionLink("View/Delete languages", "Show", "Language")</td>
-        <td>@Html.ActionLink("View/Delete spoken languages", "Show", "PersonLanguage")</td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <td>@Html.ActionLink("Add person", "Create", "Person")</td>
+            <td>@Html.ActionLink("Add city", "Index", "City")</td>
+            <td>@Html.ActionLink("Add country", "Index", "Country")</td>
+            <td>@Html.ActionLink("Add language", "Index", "Language")</td>
+            <td>@Html.ActionLink("Add language to person", "Index", "PersonLanguage")</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>@Html.ActionLink("View/Edit/Delete cities", "Show", "City")</td>
+            <td>@Html.ActionLink("View/Edit/Delete countries", "Show", "Country")</td>
+            <td>@Html.ActionLink("View/Edit/Delete languages", "Show", "Language")</td>
+            <td>@Html.ActionLink("View/Delete spoken languages", "Show", "PersonLanguage")</td>
+        </tr>
+    </table>
 
-<div id="container" class="container"></div>
+    <div id="container" class="container"></div>
+
+}

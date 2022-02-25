@@ -11,4 +11,9 @@ else
     <p>City: @ViewBag.City (@ViewBag.Country)</p>
 
     <p>Phone: @Model.Phone</p>
+
+    if (User.Identity.IsAuthenticated)
+    {
+        <a asp-controller="Person" asp-action="Edit" asp-route-personId="@Model.PersonId">Edit</a>
+    }
 }

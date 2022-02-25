@@ -15,7 +15,14 @@
     {
         <tr>
             <td>@country.Name</td>
-            <td><a asp-controller="Country" asp-action="Show" asp-route-id="@country.CountryId">Delete</a></td>
+            @if ((User.IsInRole("Admin")) || (User.IsInRole("Moderator")))
+            {
+                <td><a asp-controller="Country" asp-action="Edit" asp-route-countryId="@country.CountryId">Edit</a></td>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <td><a asp-controller="Country" asp-action="Show" asp-route-countryId="@country.CountryId">Delete</a></td>
+            }
         </tr>
     }
 </table>

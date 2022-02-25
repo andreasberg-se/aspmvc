@@ -5,30 +5,35 @@
 
 <h2>@ViewBag.Title</h2>
 
-@{
-    if (ViewBag.Message != null)
-    {
-        <strong>@ViewBag.Message</strong>
-    }
+@if (ViewBag.Message != null)
+{
+    <strong>@ViewBag.Message</strong>
 }
 
-<form asp-controller="PersonLanguage" asp-action="Index" method="post">
+@if ((User.IsInRole("Moderator")) || (User.IsInRole("Admin")))
+{
+    <form asp-controller="PersonLanguage" asp-action="Index" method="post">
 
-    <div asp-validation-summary="ModelOnly"></div>
+        <div asp-validation-summary="ModelOnly"></div>
 
-    <label asp-for="PersonId" class="left"></label>
-    <select asp-for="PersonId" asp-items="@ViewBag.PeopleList"></select>
-    <label class="left"></label>
-    <span asp-validation-for="PersonId" class="validation"></span>
+        <label asp-for="PersonId" class="left"></label>
+        <select asp-for="PersonId" asp-items="@ViewBag.PeopleList"></select>
+        <label class="left"></label>
+        <span asp-validation-for="PersonId" class="validation"></span>
 
-    <label asp-for="LanguageId" class="left"></label>
-    <select asp-for="LanguageId" asp-items="@ViewBag.LanguageList"></select>
-    <label class="left"></label>
-    <span asp-validation-for="LanguageId" class="validation"></span>
+        <label asp-for="LanguageId" class="left"></label>
+        <select asp-for="LanguageId" asp-items="@ViewBag.LanguageList"></select>
+        <label class="left"></label>
+        <span asp-validation-for="LanguageId" class="validation"></span>
 
-    <label class="left">&nbsp;</label>
-    <input type="submit" value="Add language to person" class="create" />
+        <label class="left">&nbsp;</label>
+        <input type="submit" value="Add language to person" class="create" />
 
-</form>
+    </form>
+}
+else
+{
+    <p><em>You must be a moderator or an administrator to modify content!</em></p>
+}
 
 <p><a asp-controller="Person" asp-action="Index">Back to index</a></p>
